@@ -1,0 +1,42 @@
+image: eclipse-temurin:17-jdk-alpine
+
+stages:
+  - build
+  - build_docker
+
+variables:
+  GRADLE_USER_HOME: ".gradle-cache"
+  DOCKER_IMAGE: "${CI_REGISTRY}/${CI_PROJECT_PATH}:${CI_COMMIT_REF_NAME}-${CI_PIPELINE_IID}-${CI_COMMIT_SHORT_SHA}"
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - .gradle-cache/
+
+.kaniko: &kaniko
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  before_script:
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+  only:
+    - main
+
+build:
+  stage: build
+  script:
+    - ./gradlew bootJar
+  artifacts:
+    paths:
+      - build/libs/**
+    expire_in: 1 day
+
+build_docker:
+  <<: *kaniko
+  stage: build_docker
+  cache: {}
+  needs:
+    - build
+  script:
+    - /kaniko/executor --cache=true --context ${CI_PROJECT_DIR} --dockerfile Dockerfile --destination ${DOCKER_IMAGE}
