@@ -22,6 +22,7 @@
     2. `TUYA_CLIENT_ID` — `Client ID` проєкта
     3. `TUYA_CLIENT_SECRET` — `Client Secret` проєкта
     4. `TUYA_DEVICE_ID` — `Device ID` вашої розетки
+    5. `SENTRY_DSN` — опціонально, якщо ви використовуєте [Sentry](https://devlify.sentry.io/)
 11. `fly deploy` або інша команда для деплою
 
 ## Особливості та обмеження
