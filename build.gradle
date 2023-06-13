@@ -20,6 +20,8 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-web"
     implementation "org.springframework.boot:spring-boot-starter-undertow"
     implementation "org.springframework.boot:spring-boot-starter-webflux"
+    implementation "io.sentry:sentry-spring-boot-starter-jakarta"
+
     testImplementation "org.springframework.boot:spring-boot-starter-test"
 }
 
