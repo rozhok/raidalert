@@ -11,6 +11,7 @@ public class TuyaSwitch {
 
     private final String deviceId;
     private final TuyaToken token;
+    private boolean on = true;
 
     public TuyaSwitch(@Value("${TUYA_DEVICE_ID}") String deviceId, TuyaToken token) {
         this.deviceId = deviceId;
@@ -19,10 +20,20 @@ public class TuyaSwitch {
 
     public void on() {
         manageDevice("{\"commands\":[{\"code\":\"switch_1\",\"value\":true}]}");
+        on = true;
     }
 
     public void off() {
         manageDevice("{\"commands\":[{\"code\":\"switch_1\",\"value\":false}]}");
+        on = false;
+    }
+
+    public boolean isOn() {
+        return on;
+    }
+
+    public boolean isOff() {
+        return !on;
     }
 
     protected void manageDevice(String commands) {

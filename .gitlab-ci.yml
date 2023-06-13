@@ -2,7 +2,7 @@ image: eclipse-temurin:17-jdk-alpine
 
 stages:
   - build
-  - build_docker
+  - deploy
 
 variables:
   GRADLE_USER_HOME: ".gradle-cache"
@@ -14,15 +14,6 @@ cache:
   paths:
     - .gradle-cache/
 
-.kaniko: &kaniko
-  image:
-    name: gcr.io/kaniko-project/executor:debug
-    entrypoint: [""]
-  before_script:
-    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-  only:
-    - main
-
 build:
   stage: build
   script:
@@ -32,11 +23,15 @@ build:
       - build/libs/**
     expire_in: 1 day
 
-build_docker:
-  <<: *kaniko
-  stage: build_docker
-  cache: {}
+deploy:
+  stage: deploy
+  cache: []
   needs:
     - build
+  before_script:
+    - apk add curl
+    - curl -L https://fly.io/install.sh | sh
   script:
-    - /kaniko/executor --cache=true --context ${CI_PROJECT_DIR} --dockerfile Dockerfile --destination ${DOCKER_IMAGE}
+    - /root/.fly/bin/flyctl deploy
+  only:
+    - main
