@@ -14,7 +14,8 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       - uses: actions/checkout@v3
-      - uses: ./gradlew bootJar
+      - name: Build Spring BootJar
+        run: ./gradlew bootJar
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: flyctl deploy --remote-only
         env:
