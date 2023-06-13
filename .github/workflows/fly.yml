@@ -8,9 +8,11 @@ jobs:
     name: Deploy app
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/setup-java@v2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
         with:
-          java-version: "17"
+          java-version: '17'
+          distribution: 'temurin'
       - uses: actions/checkout@v3
       - uses: ./gradlew bootJar
       - uses: superfly/flyctl-actions/setup-flyctl@master
