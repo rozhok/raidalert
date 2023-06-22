@@ -8,14 +8,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.time.LocalTime;
-import java.time.ZoneId;
-
 @Component
 public class AlertsListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(AlertsListener.class);
-    private static ZoneId kyivZone = ZoneId.of("Europe/Kiev");
 
     private final String alertsToken;
     private final TuyaSwitch tuyaSwitch;
@@ -41,7 +37,8 @@ public class AlertsListener {
             throw new RuntimeException("Alerts response shouldn't be null");
         }
 
-        boolean currentState = response.charAt(9) == 'A';
+        // remove quotes since API returns quotes
+        boolean currentState = response.replace("\"",  "").charAt(9) == 'A';
 
         if (!isAlert && currentState) {
             // alert triggered
