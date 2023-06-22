@@ -28,14 +28,6 @@ public class AlertsListener {
 
     @Scheduled(fixedDelay = 30000)
     public void checkAlert() {
-        if (isCurfew()) {
-            if (isAlert && tuyaSwitch.isOff()) {
-                // turn on switch during curfew if there's alert
-                tuyaSwitch.on();
-            }
-            return;
-        }
-
         WebClient webClient = WebClient.builder().build();
 
         String response = webClient.get()
@@ -69,14 +61,4 @@ public class AlertsListener {
             LOG.info("No alert is going on");
         }
     }
-
-    protected boolean isCurfew() {
-        LocalTime currentTime = LocalTime.now(kyivZone);
-
-        LocalTime startTime = LocalTime.MIDNIGHT;
-        LocalTime endTime = LocalTime.of(5, 0);
-
-        return currentTime.isAfter(startTime) && currentTime.isBefore(endTime);
-    }
-
 }
