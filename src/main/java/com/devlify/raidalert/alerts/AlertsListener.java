@@ -29,6 +29,7 @@ public class AlertsListener {
     @Scheduled(fixedDelay = 915000)
     public void closeDoor() {
         if (!isAlert) {
+            LOG.info("Switching power on in case previous power on signal was sent during blackout");
             tuyaSwitch.on();
         }
     }
