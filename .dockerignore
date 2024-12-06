@@ -12,3 +12,5 @@
 **/out
 !**/**/src/main/**/out
 !**/**/src/test/**/out
+build/
+!build/libs
