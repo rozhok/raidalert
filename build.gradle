@@ -7,10 +7,6 @@ plugins {
 group = "com.devlify"
 version = "1.0.0"
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_23
-}
-
 repositories {
     mavenCentral()
 }
