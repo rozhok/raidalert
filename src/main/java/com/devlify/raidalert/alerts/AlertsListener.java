@@ -22,6 +22,17 @@ public class AlertsListener {
         this.tuyaSwitch = tuyaSwitch;
     }
 
+    /**
+     * Prevent door being opened when alert is cleared but there was a blackout during.
+     * Runs every 15 mins 15 secs
+     */
+    @Scheduled(fixedDelay = 915000)
+    public void closeDoor() {
+        if (!isAlert) {
+            tuyaSwitch.on();
+        }
+    }
+
     @Scheduled(fixedDelay = 30000)
     public void checkAlert() {
         WebClient webClient = WebClient.builder().build();
